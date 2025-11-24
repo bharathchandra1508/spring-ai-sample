@@ -1,4 +1,4 @@
-package com.genai.spring_ai;
+package com.genai.spring_ai.model;
 
 public class AIPrompt
 {
