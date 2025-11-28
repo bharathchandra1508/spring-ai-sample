@@ -17,11 +17,16 @@ public class GeminiChatController
     }
 
     @PostMapping("/chat")
-    public ChatResponse chat(@RequestBody AIPrompt aiPrompt)
+    public String chat(@RequestBody AIPrompt aiPrompt)
     {
-        return chatClient.prompt()
+        return chatClient
+                .prompt()
+                .system("""
+                        You are a travel agent. Your role is to help users with questions related to holidays and travel.\s
+                        kindly inform them that you can only assist with queries related to travel and holidays.
+                        """)
                 .user(aiPrompt.getPrompt())
                 .call()
-                .chatResponse();
+                .content();
     }
 }
