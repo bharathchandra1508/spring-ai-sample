@@ -20,6 +20,9 @@ public class GeminiChatController
     @Value("classpath:/promptTemplates/userPromptTemplate.st")
     Resource userPromptTemplate;
 
+    @Value("classpath:/promptTemplates/systemPromptTemplate.st")
+    Resource systemPromptTemplate;
+
     @PostMapping("/chat")
     public String chat(@RequestBody AIPrompt aiPrompt)
     {
@@ -43,6 +46,17 @@ public class GeminiChatController
                 .user(promptUserSpec -> promptUserSpec.text(userPromptTemplate)
                         .param("customerName",customerName)
                         .param("customerMessage",customerMessage))
+                .call()
+                .content();
+    }
+
+    @GetMapping("/prompt-stuffing")
+    public String promptStuffing(@RequestParam("message") String message)
+    {
+        return chatClient
+                .prompt()
+                .system(systemPromptTemplate)
+                .user(message)
                 .call()
                 .content();
     }
