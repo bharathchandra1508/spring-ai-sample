@@ -5,6 +5,7 @@ import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Flux;
 
 @RestController
 @RequestMapping("/ai/api")
@@ -58,6 +59,16 @@ public class GeminiChatController
                 .system(systemPromptTemplate)
                 .user(message)
                 .call()
+                .content();
+    }
+
+    @GetMapping("/stream-llm-response")
+    public Flux<String> streamAIResponse(@RequestParam("message") String message)
+    {
+        return chatClient
+                .prompt()
+                .user(message)
+                .stream()
                 .content();
     }
 }
