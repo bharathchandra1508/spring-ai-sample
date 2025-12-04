@@ -27,10 +27,10 @@ public class ChatClientConfig
                 .defaultAdvisors(List.of(new SimpleLoggerAdvisor(),
                                         new TokenUsageAuditAdvisor()))
                 //.defaultOptions(chatOptions)
-                .defaultSystem("""
+                /*.defaultSystem("""
                         You are a travel agent. Your role is to help users with questions related to holidays and travel.\s
                         kindly inform them that you can only assist with queries related to travel and holidays.
-                        """)
+                        """)*/
                 .build();
     }
 }
