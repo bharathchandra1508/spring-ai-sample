@@ -4,12 +4,14 @@ import com.genai.spring_ai.model.AIPrompt;
 import com.genai.spring_ai.model.CountryCities;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.converter.ListOutputConverter;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
+import static org.springframework.ai.chat.memory.ChatMemory.CONVERSATION_ID;
 
 import java.util.List;
 
@@ -19,7 +21,7 @@ public class GeminiChatController
 {
     private final ChatClient chatClient;
 
-    public GeminiChatController(ChatClient chatClient)
+    public GeminiChatController(@Qualifier("chatMemoryChatClient") ChatClient chatClient)
     {
         this.chatClient = chatClient;
     }
@@ -110,5 +112,16 @@ public class GeminiChatController
                 .entity(new ParameterizedTypeReference<List<CountryCities>>() {
                 });
         return ResponseEntity.ok(countryCities);
+    }
+
+    @GetMapping("/chat-memory")
+    public ResponseEntity<String> chatMemory(@RequestHeader("username") String username,
+                                                                        @RequestParam("message") String message)
+    {
+        return ResponseEntity.ok(chatClient.prompt()
+                                                .user(message)
+                                                .advisors(advisorSpec -> advisorSpec.param(CONVERSATION_ID, username))
+                                                .call()
+                                                .content());
     }
 }
