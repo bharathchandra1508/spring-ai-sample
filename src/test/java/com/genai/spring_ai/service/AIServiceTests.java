@@ -16,4 +16,15 @@ public class AIServiceTests
         var joke = aiService.getJoke("IT Architects");
         System.out.println(joke);
     }
+
+    @Test
+    public void testEmbedText()
+    {
+        var embed = aiService.getEmbedding("This is a big text here");
+        System.out.println(embed.length);
+        for(float e : embed)
+        {
+            System.out.println(e+" ");
+        }
+    }
 }

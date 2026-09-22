@@ -4,6 +4,7 @@ import com.genai.spring_ai.dto.Joke;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
 import org.springframework.ai.chat.prompt.PromptTemplate;
+import org.springframework.ai.embedding.EmbeddingModel;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
@@ -12,9 +13,15 @@ import java.util.Map;
 public class AIService
 {
     private final ChatClient chatClient;
+    private final EmbeddingModel embeddingModel;
 
-    public AIService(ChatClient chatClient) {
+    public float[] getEmbedding(String text) {
+        return embeddingModel.embed(text);
+    }
+
+    public AIService(ChatClient chatClient, EmbeddingModel embeddingModel) {
         this.chatClient = chatClient;
+        this.embeddingModel = embeddingModel;
     }
 
     public String getJoke(String topic)
